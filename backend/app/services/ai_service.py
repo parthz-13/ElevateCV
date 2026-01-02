@@ -4,7 +4,7 @@ from app.config import settings
 class AIAnalyzer:
     def __init__(self):
         self.client = Groq(api_key=settings.GROQ_API_KEY)
-        self.model = "llama-3.1-70b-versatile"  # Free tier model
+        self.model = "llama-3.3-70b-versatile"  # Updated to latest supported model
     
     def analyze_resume(self, resume_text: str) -> dict:
         """Analyze resume using Groq AI."""
@@ -30,6 +30,13 @@ AREAS FOR IMPROVEMENT:
 
 KEY RECOMMENDATIONS:
 [2-3 sentences of actionable advice]
+
+CAREER GUIDANCE:
+- Recommended Role Type: [Full-time / Internship]
+- Reasoning: [Brief explanation based on experience level]
+
+- Recommended Company Environment: [Startup / Established Company]
+- Reasoning: [Brief explanation based on skill set and adaptability]
 
 Keep your analysis concise, specific, and actionable."""
 
