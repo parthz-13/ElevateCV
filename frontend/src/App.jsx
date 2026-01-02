@@ -75,6 +75,15 @@ function App() {
     }
   };
 
+  useEffect(() => {
+    if (result) {
+      const resultsElement = document.querySelector(".results-container");
+      if (resultsElement) {
+        resultsElement.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [result]);
+
   return (
     <div className="app">
       <div className="hero">
@@ -142,6 +151,21 @@ function App() {
           <div className="loading-container">
             <span className="loader"></span>
             <p>Analyzing your resume... This may take a few seconds.</p>
+          </div>
+        )}
+
+        {result && !loading && (
+          <div
+            className="success-message"
+            style={{
+              marginTop: "20px",
+              textAlign: "center",
+              color: "#468d68ff",
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+            }}
+          >
+            Analysis generated! Scroll down to view your feedback.
           </div>
         )}
 
