@@ -14,7 +14,7 @@ An AI-powered resume analysis tool built with FastAPI and React. Upload your res
 **Backend:**
 
 - FastAPI (async Python web framework)
-- Groq API (free LLM)
+- Llama API (via Groq)
 - PyPDF2 (PDF parsing)
 - UV (package manager)
 
