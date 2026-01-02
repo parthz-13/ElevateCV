@@ -110,9 +110,6 @@ function App() {
               <p>
                 <strong>Filename:</strong> {result.filename}
               </p>
-              <p>
-                <strong>AI Model:</strong> {result.model}
-              </p>
             </div>
           </div>
         )}
