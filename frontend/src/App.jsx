@@ -7,6 +7,7 @@ function App() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [apiHealthy, setApiHealthy] = useState(false);
+  const [isDragOver, setIsDragOver] = useState(false);
 
   useEffect(() => {
     checkHealth().then((health) => {
@@ -16,6 +17,10 @@ function App() {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
+    validateAndSetFile(selectedFile);
+  };
+
+  const validateAndSetFile = (selectedFile) => {
     if (selectedFile && selectedFile.type === "application/pdf") {
       setFile(selectedFile);
       setError(null);
@@ -24,6 +29,23 @@ function App() {
       setError("Please select a valid PDF file");
       setFile(null);
     }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragOver(false);
+    const selectedFile = e.dataTransfer.files[0];
+    validateAndSetFile(selectedFile);
   };
 
   const handleUpload = async () => {
@@ -55,65 +77,89 @@ function App() {
 
   return (
     <div className="app">
-      <div className="header">
-        <h1>📄 ElevateCV</h1>
-        <p>Get instant AI-powered feedback on your resume</p>
+      <div className="hero">
+        <h1>
+          Elevate your career with{" "}
+          <span className="hero-highlight">AI-powered</span> resume insights.
+        </h1>
+        <p>
+          Instant, intelligent feedback on your resume to help you stand out.
+          Our AI analyzes your CV against industry standards.
+        </p>
         {!apiHealthy && (
-          <p style={{ color: "#ffeb3b", marginTop: "10px" }}>
+          <div className="warning-banner">
             ⚠️ Backend not configured - Add GROQ_API_KEY to proceed
-          </p>
+          </div>
         )}
       </div>
 
-      <div className="card">
-        <div className="upload-section">
-          <div className="file-input-wrapper">
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={handleFileChange}
-              className="file-input"
-            />
-            <button
-              onClick={handleUpload}
-              disabled={!file || loading}
-              className="upload-btn"
+      <div className="upload-container">
+        <div
+          className={`drop-zone ${isDragOver ? "dragging" : ""}`}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+        >
+          <input
+            type="file"
+            accept=".pdf"
+            onChange={handleFileChange}
+            className="file-input"
+            id="file-upload"
+          />
+
+          <div className="icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
             >
-              {loading ? "Analyzing..." : "Analyze Resume"}
-            </button>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+              />
+            </svg>
           </div>
-          {file && (
-            <p style={{ marginTop: "10px", color: "#666" }}>
-              Selected: {file.name} ({(file.size / 1024).toFixed(2)} KB)
-            </p>
-          )}
+
+          <div className="drop-text">
+            {file ? file.name : "Choose a file or drag & drop it here"}
+          </div>
+          <div className="drop-subtext">PDF formats, up to 5MB</div>
         </div>
 
+        <button
+          onClick={handleUpload}
+          disabled={!file || loading}
+          className="analyze-btn"
+        >
+          {loading ? "Analyzing Resume..." : "Analyze Resume"}
+        </button>
+
         {loading && (
-          <div className="loading">
-            <div className="spinner"></div>
+          <div className="loading-container">
+            <span className="loader"></span>
             <p>Analyzing your resume... This may take a few seconds.</p>
           </div>
         )}
 
         {error && (
-          <div className="error">
+          <div className="error" style={{ marginTop: "20px" }}>
             <strong>Error:</strong> {error}
           </div>
         )}
-
-        {result && (
-          <div className="results">
-            <h2>Analysis Results</h2>
-            <div className="analysis-content">{result.analysis}</div>
-            <div className="metadata">
-              <p>
-                <strong>Filename:</strong> {result.filename}
-              </p>
-            </div>
-          </div>
-        )}
       </div>
+
+      {result && (
+        <div className="results-container">
+          <div className="results-header">
+            <h2>Analysis Results</h2>
+          </div>
+          <div className="results-content">{result.analysis}</div>
+        </div>
+      )}
     </div>
   );
 }
