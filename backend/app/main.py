@@ -41,6 +41,7 @@ async def root():
     }
 
 @app.get("/health")
+@app.head("/health")
 async def health_check():
     return {"status": "healthy", "api_configured": bool(settings.GROQ_API_KEY)}
 
