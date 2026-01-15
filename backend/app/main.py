@@ -10,7 +10,7 @@ app = FastAPI(
     title="ElevateCV", description="AI-powered resume analysis API", version="1.0.0"
 )
 
-# CORS middleware :
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -54,11 +54,9 @@ async def analyze_resume(file: UploadFile = File(...)):
         JSON with analysis results
     """
 
-    # Validate file extension :
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail="Only PDF files are supported")
 
-    # Read file content :
     try:
         file_content = await file.read()
 
@@ -72,7 +70,6 @@ async def analyze_resume(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to read file: {str(e)}")
 
-    # Extract text from PDF :
     try:
         resume_text = pdf_parser.extract_text(file_content)
 
@@ -87,7 +84,6 @@ async def analyze_resume(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF processing failed: {str(e)}")
 
-    # Analyze with AI :
     if not settings.GROQ_API_KEY:
         raise HTTPException(
             status_code=500,
