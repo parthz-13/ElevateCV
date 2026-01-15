@@ -10,6 +10,7 @@ dependencies = [
     "pypdf2>=3.0.0",
     "groq>=0.4.0",
     "python-dotenv>=1.0.0",
+    "ruff>=0.14.11",
 ]
 
 [tool.uv]

@@ -1,14 +1,15 @@
 from groq import Groq
 from app.config import settings
 
+
 class AIAnalyzer:
     def __init__(self):
         self.client = Groq(api_key=settings.GROQ_API_KEY)
         self.model = "llama-3.3-70b-versatile"  # Updated to latest supported model
-    
+
     def analyze_resume(self, resume_text: str) -> dict:
         """Analyze resume using Groq AI."""
-        
+
         prompt = f"""You are an expert resume reviewer. Analyze the following resume and provide a structured review.
 
 Resume Content:
@@ -45,28 +46,18 @@ Keep your analysis concise, specific, and actionable."""
                 messages=[
                     {
                         "role": "system",
-                        "content": "You are an experienced HR professional and resume expert. Provide honest, constructive feedback."
+                        "content": "You are an experienced HR professional and resume expert. Provide honest, constructive feedback.",
                     },
-                    {
-                        "role": "user",
-                        "content": prompt
-                    }
+                    {"role": "user", "content": prompt},
                 ],
                 model=self.model,
                 temperature=0.7,
                 max_tokens=1024,
             )
-            
+
             analysis = chat_completion.choices[0].message.content
-            
-            return {
-                "success": True,
-                "analysis": analysis,
-                "model_used": self.model
-            }
-            
+
+            return {"success": True, "analysis": analysis, "model_used": self.model}
+
         except Exception as e:
-            return {
-                "success": False,
-                "error": f"AI analysis failed: {str(e)}"
-            }
+            return {"success": False, "error": f"AI analysis failed: {str(e)}"}
