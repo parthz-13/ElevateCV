@@ -97,7 +97,7 @@ function App() {
         </p>
         {!apiHealthy && (
           <div className="warning-banner">
-            ⚠️ Backend not configured - Add GROQ_API_KEY to proceed
+            ⚠️ Hosted on free-tier infrastructure. First request may take ~20–30 seconds due to cold start.
           </div>
         )}
       </div>
