@@ -98,6 +98,7 @@ function App() {
         {!apiHealthy && (
           <div className="warning-banner">
             ⚠️ Hosted on free-tier infrastructure. First request may take ~20–30 seconds due to cold start.
+               Kindly wait for this message to disappear. 
           </div>
         )}
       </div>
